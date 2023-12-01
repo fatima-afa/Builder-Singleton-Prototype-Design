@@ -19,10 +19,16 @@ public class AccountRepoImpl implements AccountRepo {
     private Map<String, BankAccount> bankAccountMap=new HashMap<>();
     private long accountCount=0;
     @Override
-    public BankAccount save(BankAccount bankAccount) {
-        accountCount++;
-        bankAccount.setAccountID(UUID.randomUUID().toString());
-        bankAccountMap.put(bankAccount.getAccountID(),bankAccount);
+    public  BankAccount save(BankAccount bankAccount) {
+        synchronized (this){
+            accountCount++;
+        }
+            bankAccount.setAccountID(UUID.randomUUID().toString());
+        synchronized (this){
+            bankAccountMap.put(bankAccount.getAccountID(),bankAccount);
+    }
+
+
         return bankAccount;
     }
 
@@ -57,7 +63,7 @@ public class AccountRepoImpl implements AccountRepo {
         bankAccountMap.remove(id);
     }
 
-    public void populateDate(){
+    public  void populateDate(){
         for (int i = 0; i < 10; i++) {
             BankAccount bankAccount= BankDirector.accountBuilder()
                     .balance(100*Math.random()*900)

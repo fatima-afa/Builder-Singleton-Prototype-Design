@@ -6,12 +6,13 @@ import net.afa.enumm.AccountType;
 import java.util.Random;
 import java.util.UUID;
 
-public class BankAccount {
+public class BankAccount implements Cloneable {
     private String accountID;
     private double balance;
     private String currency;
     private AccountType type;
     private AccountStatus status;
+    private Customer customer;
 
     public BankAccount( double balance, String currency, AccountType type, AccountStatus status) {
         this.accountID = UUID.randomUUID().toString();
@@ -25,6 +26,13 @@ public class BankAccount {
         this.accountID = UUID.randomUUID().toString();
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
     public String getAccountID() {
         return accountID;
@@ -74,9 +82,9 @@ public class BankAccount {
                 ", currency='" + currency + '\'' +
                 ", type=" + type +
                 ", status=" + status +
+                ", customer=" + customer +
                 '}';
     }
-
 
     public static class AccountBuilder{
         private BankAccount bankAccount=new BankAccount();
@@ -109,4 +117,8 @@ public class BankAccount {
         }
     }
 
+    @Override
+    public BankAccount clone() throws CloneNotSupportedException {
+        return (BankAccount)super.clone();
+    }
 }
